@@ -42,8 +42,8 @@ def schedule(df):
     b.extend(df['自動加工（分）'])
 
     # 仕事iの作成数量
-    # c = ['作成数量']
-    # c.extend(df['作成数量'])
+    c = ['作成数量']
+    c.extend(df['作成数量'])
 
     #空問題の作成
     model = Model('Schedule')
@@ -91,34 +91,6 @@ def schedule(df):
 
     #最適化の結果出力
     if status == OptimizationStatus.OPTIMAL:
-
-        # print()
-        # print(" x , v , y , w , z")
-        # for i in I:
-        #     print(x[i].x, v[i].x, y[i].x, w[i].x, z[i].x)
-
-
-        # print()
-        # print("達成仕事数")
-        # print(sum(x[i].x + y[i].x + z[i].x for i in I))
-
-        # print()
-        # print("作成数量")
-        # print(sum(c[i]*(x[i].x + y[i].x + z[i].x) for i in I))
-
-        # print()
-        # print("所要時間")
-        # print("8:30-12:00  ", sum(a[i]*x[i].x + b[i]*v[i].x  for i in I), "<= 210")
-        # print("8:30-15:30  ", sum((a[i]+b[i])*x[i].x + a[i]*y[i].x+b[i]*w[i].x  for i in I), "<= 420")
-        # print("8:30-17:20  ", sum((a[i]+b[i])*(x[i].x + y[i].x + z[i].x) for i in I), "<= 530")
-        # print("12:55-15:40 ", sum((a[i]+b[i])*y[i].x  for i in I), "<= 165")
-        # print("15:40-17:20 ", sum((a[i]+b[i])*z[i].x  for i in I), "<= 100")
-        # print("\n")
-
-
-        # 仕事一覧とその仕事の開始時間、完了時間
-        # result = {"仕事名":[], "仕事ID":[],"開始時間":[],"完了時間":[],"順番":[],"前後":[]}
-
 
         orders = 1
 
