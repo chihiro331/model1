@@ -309,8 +309,8 @@ def main():
     if st.button("作業データを手入力"):
         df_edit = pd.DataFrame(np.arange(60).reshape(20, 3), columns=("仕事ID", "前段取（分）", "自動加工（分）"))
         df_edited = st.experimental_data_editor(df_edit)
-        dataframe = df_edited
-        if dataframe is not None:
+        if df_edited is not None:
+            dataframe = df_edited
             st.write(dataframe)
         
     # 最適化実行
