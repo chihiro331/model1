@@ -312,9 +312,9 @@ def main():
         # 表として書き出される
         st.write(dataframe)
 
-    #作業データを手入力する場合
-    if st.button("作業データを手入力"):
-        dataframe = df_editor()
+    # 作業データを手入力する場合
+    # if st.button("作業データを手入力"):
+    #     dataframe = df_editor()
         
     # 最適化実行
     if st.button("最適化実行"):
