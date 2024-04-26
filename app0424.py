@@ -247,11 +247,11 @@ def schedule(df):
 
 #----------------df_editor---------------------------------------------------------------------
 
-def df_editor():
-    df_edit = pd.DataFrame(np.arange(60).reshape(20, 3), columns=("仕事ID", "前段取（分）", "自動加工（分）"))
-    df_edited = st.data_editor(df_edit)
-    if st.button("確定"):
-        return df_edited
+# def df_editor():
+#     df_edit = pd.DataFrame(np.arange(60).reshape(20, 3), columns=("仕事ID", "前段取（分）", "自動加工（分）"))
+#     df_edited = st.data_editor(df_edit)
+#     if st.button("確定"):
+#         return df_edited
 
 #----------------main---------------------------------------------------------------------
 
