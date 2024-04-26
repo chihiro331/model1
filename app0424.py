@@ -245,6 +245,12 @@ def schedule(df):
     else:
         print('最適解が求まりませんでした。')
 
+#----------------df_editor---------------------------------------------------------------------
+
+def df_editor():
+    df_edit = pd.DataFrame(np.arange(60).reshape(20, 3), columns=("仕事ID", "前段取（分）", "自動加工（分）"))
+    df_edited = st.data_editor(df_edit)
+    return df_edited
 
 #----------------main---------------------------------------------------------------------
 
@@ -307,11 +313,7 @@ def main():
 
     #作業データを手入力する場合
     if st.button("作業データを手入力"):
-        df_edit = pd.DataFrame(np.arange(60).reshape(20, 3), columns=("仕事ID", "前段取（分）", "自動加工（分）"))
-        df_edited = st.data_editor(df_edit)
-        if df_edited is not None:
-            dataframe = df_edited
-            st.write(dataframe)
+        dataframe = df_editor()
         
     # 最適化実行
     if st.button("最適化実行"):
