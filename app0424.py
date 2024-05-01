@@ -20,7 +20,7 @@ def add_minutes_to_datetime(minute_to_add):
 
 ##ガントチャートの描画関数
 def draw_schedule(df):
-    fig = px.timeline(df, x_start="Start", x_end="Finish", y="順番", color="BeforeAfter", text="TaskID")
+    fig = px.timeline(df, x_start="Start", x_end="Finish", y="Orders", color="BeforeAfter", text="TaskID")
     fig.update_yaxes(autorange="reversed") #縦軸を降順に変更
     fig.update_traces(textposition='inside', insidetextanchor='middle') # px.timelineの引数textを置く位置を内側の中央に変更
     st.plotly_chart(fig, use_container_width=True)
