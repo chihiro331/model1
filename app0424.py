@@ -20,9 +20,27 @@ def add_minutes_to_datetime(minute_to_add):
 
 ##ガントチャートの描画関数
 def draw_schedule(df):
-    fig = px.timeline(df, x_start="Start", x_end="Finish", y="Orders", color="BeforeAfter", text="TaskID")
-    fig.update_yaxes(autorange="reversed") #縦軸を降順に変更
-    fig.update_traces(textposition='inside', insidetextanchor='middle') # px.timelineの引数textを置く位置を内側の中央に変更
+    fig = px.timeline(df, x_start="Start", x_end="Finish", y="順番", color="BeforeAfter", text="TaskTime")
+    fig.update_layout(plot_bgcolor='lightgrey')
+
+    timebar=[]
+    for i in range(len(df)):
+        timebar.append(df["Start"][i])
+        timebar.append(df["Finish"][i])
+    #横軸
+    fig.update_xaxes(tickvals=timebar,
+                     tickformat='%H %M',
+                     ticks='inside',
+                     ticklen=325,
+                     tickwidth=1,
+                     tickcolor='grey')
+
+    #縦軸
+    fig.update_yaxes(zeroline=True,
+                     zerolinecolor='grey',
+                     autorange="reversed")
+    fig.update_traces(textposition='inside', 
+                      insidetextanchor='middle') # px.timelineの引数textを置く位置を内側の中央に変更
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -92,32 +110,8 @@ def schedule(df):
     #最適化の結果出力
     if status == OptimizationStatus.OPTIMAL:
 
-        print()
-        print(" x , v , y , w , z")
-        for i in I:
-            print(x[i].x, v[i].x, y[i].x, w[i].x, z[i].x)
-
-
-        print()
-        print("達成仕事数")
-        print(sum(x[i].x + y[i].x + z[i].x for i in I))
-
-        print()
-        print("作成数量")
-        print(sum(c[i]*(x[i].x + y[i].x + z[i].x) for i in I))
-
-        print()
-        print("所要時間")
-        print("8:30-12:00  ", sum(a[i]*x[i].x + b[i]*v[i].x  for i in I), "<= 210")
-        print("8:30-15:30  ", sum((a[i]+b[i])*x[i].x + a[i]*y[i].x+b[i]*w[i].x  for i in I), "<= 420")
-        print("8:30-17:20  ", sum((a[i]+b[i])*(x[i].x + y[i].x + z[i].x) for i in I), "<= 530")
-        print("12:55-15:40 ", sum((a[i]+b[i])*y[i].x  for i in I), "<= 165")
-        print("15:40-17:20 ", sum((a[i]+b[i])*z[i].x  for i in I), "<= 100")
-        print("\n")
-
-
         #仕事一覧とその仕事の開始時間、完了時間
-        result = {"仕事名":[], "仕事ID":[],"開始時間":[],"完了時間":[],"順番":[],"前後":[]}
+        result = {"仕事名":[], "仕事ID":[],"開始時間":[],"完了時間":[],"作業時間":[],"順番":[],"前後":[]}
 
 
         orders = 1
@@ -129,6 +123,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+a[i])
+                result["作業時間"].append(a[i])
                 time += a[i]
                 result["順番"].append(orders)
                 result["前後"].append("Before")
@@ -137,6 +132,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+b[i])
+                result["作業時間"].append(b[i])
                 time += b[i]
                 result["順番"].append(orders)
                 orders += 1
@@ -148,6 +144,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+a[i])
+                result["作業時間"].append(a[i])
                 time += a[i]
                 result["順番"].append(orders)
                 result["前後"].append("Before")
@@ -156,6 +153,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+b[i])
+                result["作業時間"].append(b[i])
                 time += b[i]
                 result["順番"].append(orders)
                 orders += 1
@@ -171,6 +169,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+a[i])
+                result["作業時間"].append(a[i])
                 time += a[i]
                 result["順番"].append(orders)
                 result["前後"].append("Before")
@@ -179,6 +178,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+b[i])
+                result["作業時間"].append(a[i])
                 time += b[i]
                 result["順番"].append(orders)
                 orders += 1
@@ -190,6 +190,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+a[i])
+                result["作業時間"].append(a[i])
                 time += a[i]
                 result["順番"].append(orders)
                 result["前後"].append("Before")
@@ -198,6 +199,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+b[i])
+                result["作業時間"].append(b[i])
                 time += b[i]
                 result["順番"].append(orders)
                 orders += 1
@@ -213,6 +215,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+a[i])
+                result["作業時間"].append(a[i])
                 time += a[i]
                 result["順番"].append(orders)
                 result["前後"].append("Before")
@@ -221,6 +224,7 @@ def schedule(df):
                 result["仕事ID"].append(i)
                 result["開始時間"].append(time)
                 result["完了時間"].append(time+b[i])
+                result["作業時間"].append(b[i])
                 time += b[i]
                 result["順番"].append(orders)
                 orders += 1
@@ -234,7 +238,8 @@ def schedule(df):
               Finish      = add_minutes_to_datetime(result["完了時間"][i]),
               TaskName        = result["仕事名"][i],
               TaskID      = result["仕事ID"][i],
-              Orders        = result["順番"][i],
+              TaskTime    = result["作業時間"][i],
+              順番        = result["順番"][i],
               BeforeAfter = result["前後"][i])
 
           )
@@ -249,6 +254,9 @@ def schedule(df):
 #----------------main---------------------------------------------------------------------
 
 def main():
+    """
+
+    """
     # 画面全体の設定
     st.set_page_config(
         page_title="スケジュール最適化アプリ",
@@ -266,34 +274,6 @@ def main():
         + ##### 設定が完了したら、下の「最適化実行」ボタンを押してください。
         """
     )
-
-    # インプットデータの設定
-    st.sidebar.markdown(
-        """
-        ## インプットデータの設定
-        """
-    )
-
-    # 従業員数を設定
-    st.sidebar.markdown(
-        """
-        ### 1. 従業員数を設定
-        """
-    )
-    num_employees = st.sidebar.number_input(
-        "従業員", min_value=1, max_value=3, value=1
-    )
-
-    # 加工機台数を設定
-    st.sidebar.markdown(
-        """
-        ### 2. 加工機台数を設定
-        """
-    )
-    num_auto = st.sidebar.number_input("自動加工機", min_value=1, max_value=2, value=1)
-    num_manu = st.sidebar.number_input("手動加工機", min_value=0, max_value=2, value=0)
-
-
 
     # ファイルアップローダーの準備
     uploaded_file = st.file_uploader("作業データCSVファイルのアップロード", type="csv")
