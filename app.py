@@ -20,13 +20,19 @@ def add_minutes_to_datetime(minute_to_add):
 
 ##ガントチャートの描画関数
 def draw_schedule(df):
-    fig = px.timeline(df, x_start="Start", x_end="Finish", y="順番", color="BeforeAfter", text="TaskTime")
+    fig = px.timeline(df, x_start="Start", x_end="Finish", y="TaskID", color="BeforeAfter", text="TaskTime")
     fig.update_layout(plot_bgcolor='lightgrey')
 
     timebar=[]
-    for i in range(len(df)):
-        timebar.append(df["Start"][i])
-        timebar.append(df["Finish"][i])
+    t = datetime(2000, 1, 1, 8, 30)
+    timebar.append(t)
+    timebar.append(t + timedelta(minutes = 210))
+    timebar.append(t + timedelta(minutes = 265))
+    timebar.append(t + timedelta(minutes = 420))
+    timebar.append(t + timedelta(minutes = 430))
+    timebar.append(t + timedelta(minutes = 530))
+    timebar.append(t + timedelta(minutes = 540))
+
     #横軸
     fig.update_xaxes(tickvals=timebar,
                      tickformat='%H %M',
@@ -39,7 +45,7 @@ def draw_schedule(df):
     fig.update_yaxes(zeroline=True,
                      zerolinecolor='grey',
                      autorange="reversed")
-    fig.update_traces(textposition='inside', 
+    fig.update_traces(textposition='inside',
                       insidetextanchor='middle') # px.timelineの引数textを置く位置を内側の中央に変更
     st.plotly_chart(fig, use_container_width=True)
 
@@ -245,10 +251,11 @@ def schedule(df):
           )
         DF = pd.DataFrame(data)
         draw_schedule(DF)
-
+        return DF
 
     else:
         print('最適解が求まりませんでした。')
+        return 0
 
 
 #----------------main---------------------------------------------------------------------
@@ -288,9 +295,13 @@ def main():
     # 最適化実行
     if st.button("最適化実行"):
         with st.spinner("計算中"):
-          schedule(dataframe)
+          df = schedule(dataframe)
+          st.write("立案結果")
+          for i in range(0,len(df["Start"]),2):
+             st.write(f'{df["Start"][i].time()} ～ {df["Finish"][i+1].time()}   TaskID:{df["TaskID"][i]}')
+          
 
-
+          
 
 if __name__ == "__main__":
     main()
