@@ -20,8 +20,10 @@ def add_minutes_to_datetime(minute_to_add):
 
 ##ガントチャートの描画関数
 def draw_schedule(df):
-    fig = px.timeline(df, x_start="Start", x_end="Finish", y="TaskID", color="BeforeAfter", text="TaskTime")
+    fig = px.timeline(df, x_start="Start", x_end="Finish", y="順番", color="BeforeAfter", text="TaskTime")
     fig.update_layout(plot_bgcolor='lightgrey')
+    fig2 = px.timeline(df, x_start="Start", x_end="Finish", y="TaskID", color="BeforeAfter", text="TaskTime")
+    fig2.update_layout(plot_bgcolor='lightgrey')
 
     timebar=[]
     t = datetime(2000, 1, 1, 8, 30)
@@ -40,6 +42,12 @@ def draw_schedule(df):
                      ticklen=325,
                      tickwidth=1,
                      tickcolor='grey')
+    fig2.update_xaxes(tickvals=timebar,
+                     tickformat='%H %M',
+                     ticks='inside',
+                     ticklen=325,
+                     tickwidth=1,
+                     tickcolor='grey')
 
     #縦軸
     fig.update_yaxes(zeroline=True,
@@ -47,8 +55,13 @@ def draw_schedule(df):
                      autorange="reversed")
     fig.update_traces(textposition='inside',
                       insidetextanchor='middle') # px.timelineの引数textを置く位置を内側の中央に変更
+    fig2.update_yaxes(zeroline=True,
+                     zerolinecolor='grey',
+                     autorange="reversed")
+    fig2.update_traces(textposition='inside',
+                      insidetextanchor='middle')
     st.plotly_chart(fig, use_container_width=True)
-
+    st.plotly_chart(fig2, use_container_width=True)
 
 ##最適化
 def schedule(df):
@@ -298,10 +311,10 @@ def main():
           df = schedule(dataframe)
           st.write("立案結果")
           for i in range(0,len(df["Start"]),2):
-             st.write(f'{df["Start"][i].time()} ～ {df["Finish"][i+1].time()}   TaskID:{df["TaskID"][i]}')
-          
+             st.write(f'{df["Start"][i].time()} ～ {df["Finish"][i+1].time()} TaskID:{df["TaskID"][i]}')
 
-          
+
+
 
 if __name__ == "__main__":
     main()
